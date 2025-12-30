@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:note_application_mobile_app/pages/add_page.dart';
+import 'package:note_application_mobile_app/pages/favorite_page.dart';
 import 'package:note_application_mobile_app/pages/home_page.dart';
 
 class ScreenManager extends StatefulWidget {
@@ -10,7 +12,7 @@ class ScreenManager extends StatefulWidget {
 
 class _ScreenManagerState extends State<ScreenManager> {
   int _selectedIndex = 0;
-  final List<Widget> _screenList = [HomePage()];
+  final List<Widget> _screenList = [HomePage(), AddPage(), FavoritePage()];
 
   void _onItemTap(int index) {
     setState(() {
@@ -26,8 +28,14 @@ class _ScreenManagerState extends State<ScreenManager> {
         onTap: _onItemTap,
         items: [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
-          BottomNavigationBarItem(icon: Icon(Icons.add_box_sharp), label: "Add"),
-          BottomNavigationBarItem(icon: Icon(Icons.favorite), label: "Favorites")
+          BottomNavigationBarItem(
+            icon: Icon(Icons.add_box_sharp),
+            label: "Add",
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.favorite),
+            label: "Favorites",
+          ),
         ],
       ),
     );
