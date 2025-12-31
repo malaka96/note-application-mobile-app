@@ -20,7 +20,11 @@ class _AddPageState extends State<AddPage> {
     super.dispose();
   }
 
-  void _saveNote() {}
+
+
+  void _saveNote() {
+    
+  }
 
   @override
   Widget build(BuildContext context) {

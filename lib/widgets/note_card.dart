@@ -4,7 +4,38 @@ class NoteCard extends StatelessWidget {
   final int id;
   final String title;
   final String body;
-  const NoteCard({super.key, required this.id, required this.title, required this.body});
+  final void Function() delete;
+  const NoteCard({
+    super.key,
+    required this.id,
+    required this.title,
+    required this.body,
+    required this.delete,
+  });
+
+  void _deleteNote(BuildContext context, int noteId) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text("Confirm Delete"),
+          content: const Text("Are you sure you want to delete this note?"),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text("Cancel"),
+            ),
+            TextButton(
+              onPressed: () async {
+                delete();
+              },
+              child: const Text("Delete", style: TextStyle(color: Colors.red)),
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +62,7 @@ class NoteCard extends StatelessWidget {
                         icon: Icon(Icons.favorite, color: Colors.grey),
                       ),
                       IconButton(
-                        onPressed: () {},
+                        onPressed: () => _deleteNote(context, id),
                         icon: Icon(Icons.delete, color: Colors.red),
                       ),
                     ],

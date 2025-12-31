@@ -10,6 +10,23 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  Future<void> _deleteNote(int noteId) async {
+    try {
+      await ApiServices().deleteNote(noteId);
+      if (!mounted) return;
+      Navigator.of(context).pop();
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Note deleted')));
+      setState(() {});
+    } catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text("Error in deleting note")));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,6 +52,9 @@ class _HomePageState extends State<HomePage> {
                     id: note.id,
                     title: note.title,
                     body: note.body,
+                    delete: () {
+                      _deleteNote(note.id);
+                    },
                   );
                 },
               );

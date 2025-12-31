@@ -17,4 +17,18 @@ class ApiServices {
       throw Exception("Failed to fetch all notes");
     }
   }
+
+  Future<void> deleteNote(int id) async {
+    final response = await http.delete(
+      Uri.parse("http://localhost:8080/delete/$id"),
+      headers: {
+        'Accept': 'application/json',
+      }
+    );
+    if (response.statusCode == 200 || response.statusCode == 204) {
+      //
+    } else {
+      throw Exception("Failed to delete Note");
+    }
+  }
 }
