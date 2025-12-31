@@ -26,6 +26,7 @@ class _ScreenManagerState extends State<ScreenManager> {
       body: _screenList[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
         onTap: _onItemTap,
+        currentIndex: _selectedIndex,
         items: [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
           BottomNavigationBarItem(

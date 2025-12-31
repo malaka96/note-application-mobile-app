@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 
 class NoteCard extends StatelessWidget {
+  final int id;
   final String title;
   final String body;
-  const NoteCard({super.key, required this.title, required this.body});
+  const NoteCard({super.key, required this.id, required this.title, required this.body});
 
   @override
   Widget build(BuildContext context) {
@@ -37,9 +38,9 @@ class NoteCard extends StatelessWidget {
                   ),
                 ],
               ),
-              const SizedBox(height: 5),
+              const SizedBox(height: 2),
               const Divider(),
-              const SizedBox(height: 5),
+              const SizedBox(height: 2),
               Text(body),
             ],
           ),

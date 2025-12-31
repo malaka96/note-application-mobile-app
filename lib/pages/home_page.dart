@@ -31,7 +31,11 @@ class _HomePageState extends State<HomePage> {
                 itemCount: notes.length,
                 itemBuilder: (context, index) {
                   final note = notes[index];
-                  return NoteCard(title: note.title, body: note.body);
+                  return NoteCard(
+                    id: note.id,
+                    title: note.title,
+                    body: note.body,
+                  );
                 },
               );
             }
