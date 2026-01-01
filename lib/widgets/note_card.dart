@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 
-class NoteCard extends StatelessWidget {
+class NoteCard extends StatefulWidget {
   final int id;
   final String title;
   final String body;
   final bool isFavorite;
   final void Function() delete;
+  final void Function() toggleFavorite;
   final void Function() showBottomSheet;
   const NoteCard({
     super.key,
@@ -14,9 +15,15 @@ class NoteCard extends StatelessWidget {
     required this.body,
     required this.isFavorite,
     required this.delete,
+    required this.toggleFavorite,
     required this.showBottomSheet,
   });
 
+  @override
+  State<NoteCard> createState() => _NoteCardState();
+}
+
+class _NoteCardState extends State<NoteCard> {
   void _deleteNote(BuildContext context, int noteId) {
     showDialog(
       context: context,
@@ -31,7 +38,7 @@ class NoteCard extends StatelessWidget {
             ),
             TextButton(
               onPressed: () async {
-                delete();
+                widget.delete();
               },
               child: const Text("Delete", style: TextStyle(color: Colors.red)),
             ),
@@ -41,13 +48,20 @@ class NoteCard extends StatelessWidget {
     );
   }
 
+  late bool currentFavoriteState;
+
+  @override
+  void initState() {
+    currentFavoriteState = widget.isFavorite;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: GestureDetector(
-        onTap: showBottomSheet,
+        onTap: widget.showBottomSheet,
         child: Container(
           decoration: BoxDecoration(
             border: Border.all(width: 2),
@@ -62,7 +76,7 @@ class NoteCard extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      title,
+                      widget.title,
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 15,
@@ -71,11 +85,21 @@ class NoteCard extends StatelessWidget {
                     Row(
                       children: [
                         IconButton(
-                          onPressed: () {},
-                          icon: Icon(Icons.favorite, color: Colors.grey),
+                          onPressed: () {
+                            widget.toggleFavorite();
+                            setState(() {
+                              currentFavoriteState = !currentFavoriteState;
+                            });
+                          },
+                          icon: Icon(
+                            Icons.favorite,
+                            color: currentFavoriteState
+                                ? Colors.black
+                                : Colors.grey,
+                          ),
                         ),
                         IconButton(
-                          onPressed: () => _deleteNote(context, id),
+                          onPressed: () => _deleteNote(context, widget.id),
                           icon: Icon(Icons.delete, color: Colors.red),
                         ),
                       ],
@@ -85,7 +109,7 @@ class NoteCard extends StatelessWidget {
                 const SizedBox(height: 2),
                 const Divider(),
                 const SizedBox(height: 2),
-                Text(body),
+                Text(widget.body),
               ],
             ),
           ),

@@ -44,6 +44,31 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  Future<void> _toggleFavorite(Note note) async {
+    try {
+      await ApiServices().updateNote(
+        Note(
+          id: note.id,
+          title: note.title,
+          body: note.body,
+          isFavorite: !note.isFavorite,
+        ),
+      );
+
+      if (!mounted) return;
+
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text("Toggled favorite")));
+    } catch (e) {
+      if (!mounted) return;
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Failed to toggle favorite")),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -72,6 +97,9 @@ class _HomePageState extends State<HomePage> {
                     isFavorite: note.isFavorite,
                     delete: () {
                       _deleteNote(note.id);
+                    },
+                    toggleFavorite: () {
+                      _toggleFavorite(note);
                     },
                     showBottomSheet: () {
                       showBottomSheet(note);
