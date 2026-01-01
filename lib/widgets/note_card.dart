@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:note_application_mobile_app/models/note.dart';
-import 'package:note_application_mobile_app/widgets/bottom_sheet_body.dart';
 
 class NoteCard extends StatelessWidget {
   final int id;
@@ -8,6 +6,7 @@ class NoteCard extends StatelessWidget {
   final String body;
   final bool isFavorite;
   final void Function() delete;
+  final void Function() showBottomSheet;
   const NoteCard({
     super.key,
     required this.id,
@@ -15,6 +14,7 @@ class NoteCard extends StatelessWidget {
     required this.body,
     required this.isFavorite,
     required this.delete,
+    required this.showBottomSheet,
   });
 
   void _deleteNote(BuildContext context, int noteId) {
@@ -41,28 +41,13 @@ class NoteCard extends StatelessWidget {
     );
   }
 
-  void _showBottomSheet(BuildContext context) {
-    showModalBottomSheet(
-      context: context,
-      builder: (context) {
-        return BottomSheetBody(
-          note: Note(
-            id: id,
-            title: title,
-            body: body,
-            isFavorite: isFavorite,
-          ),
-        );
-      },
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: GestureDetector(
-        onTap: () => _showBottomSheet(context),
+        onTap: showBottomSheet,
         child: Container(
           decoration: BoxDecoration(
             border: Border.all(width: 2),

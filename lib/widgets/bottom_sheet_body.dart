@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:note_application_mobile_app/models/note.dart';
+import 'package:note_application_mobile_app/services/api_services.dart';
 
 class BottomSheetBody extends StatelessWidget {
   final Note note;
-  BottomSheetBody({super.key, required this.note});
+  final void Function() onNoteUpdated;
+  BottomSheetBody({super.key, required this.note, required this.onNoteUpdated});
 
   final _titleController = TextEditingController();
   final _bodyController = TextEditingController();
@@ -113,7 +115,33 @@ class BottomSheetBody extends StatelessWidget {
                     borderRadius: BorderRadiusGeometry.circular(8),
                   ),
                 ),
-                onPressed: () {},
+                onPressed: () async {
+                  try {
+                    await ApiServices().updateNote(
+                      Note(
+                        id: note.id,
+                        title: _titleController.text,
+                        body: _bodyController.text,
+                        isFavorite: note.isFavorite,
+                      ),
+                    );
+
+                    _titleController.clear();
+                    _bodyController.clear();
+                    onNoteUpdated();
+
+                    if (!context.mounted) return;
+
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text("Note updated")),
+                    );
+                  } catch (e) {
+                    if (!context.mounted) return;
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text("Failed to update note")),
+                    );
+                  }
+                },
                 child: const Text(
                   'UPDATE NOTE',
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),

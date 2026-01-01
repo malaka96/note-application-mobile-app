@@ -54,4 +54,29 @@ class ApiServices {
       throw Exception(e);
     }
   }
+
+  Future<void> updateNote(Note note) async {
+    try {
+      final response = await http.put(
+        Uri.parse("http://localhost:8080/update"),
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+        body: jsonEncode(
+          note.toJson(),
+        ),
+      );
+
+      if (response.statusCode == 201 || response.statusCode == 200) {
+        // If server returns the created note with real id
+      } else {
+        throw Exception(
+          'Failed to update note • Status: ${response.statusCode}\n${response.body}',
+        );
+      }
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
 }

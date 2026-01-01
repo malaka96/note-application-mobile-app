@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:note_application_mobile_app/models/note.dart';
 import 'package:note_application_mobile_app/services/api_services.dart';
+import 'package:note_application_mobile_app/widgets/bottom_sheet_body.dart';
 import 'package:note_application_mobile_app/widgets/note_card.dart';
 
 class HomePage extends StatefulWidget {
@@ -25,6 +27,21 @@ class _HomePageState extends State<HomePage> {
         context,
       ).showSnackBar(const SnackBar(content: Text("Error in deleting note")));
     }
+  }
+
+  void showBottomSheet(Note note) {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return BottomSheetBody(
+          note: note,
+          onNoteUpdated: () {
+            Navigator.of(context).pop();
+            setState(() {});
+          },
+        );
+      },
+    );
   }
 
   @override
@@ -56,7 +73,9 @@ class _HomePageState extends State<HomePage> {
                     delete: () {
                       _deleteNote(note.id);
                     },
-
+                    showBottomSheet: () {
+                      showBottomSheet(note);
+                    },
                   );
                 },
               );
