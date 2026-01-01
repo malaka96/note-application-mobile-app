@@ -52,9 +52,11 @@ class _HomePageState extends State<HomePage> {
                     id: note.id,
                     title: note.title,
                     body: note.body,
+                    isFavorite: note.isFavorite,
                     delete: () {
                       _deleteNote(note.id);
                     },
+
                   );
                 },
               );
