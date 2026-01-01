@@ -18,6 +18,21 @@ class ApiServices {
     }
   }
 
+  Future<List<Note>> fetchFavoritesNotes() async {
+    final response = await http.get(Uri.parse("http://localhost:8080/"));
+
+    if (response.statusCode == 200) {
+      final List<dynamic> jsonData = json.decode(response.body);
+
+      return jsonData
+          .map((item) => Note.fromJson(item))
+          .where((note) => note.isFavorite)
+          .toList();
+    } else {
+      throw Exception("Failed to fetch all notes");
+    }
+  }
+
   Future<void> deleteNote(int id) async {
     final response = await http.delete(
       Uri.parse("http://localhost:8080/delete/$id"),
@@ -63,9 +78,7 @@ class ApiServices {
           'Content-Type': 'application/json',
           'Accept': 'application/json',
         },
-        body: jsonEncode(
-          note.toJson(),
-        ),
+        body: jsonEncode(note.toJson()),
       );
 
       if (response.statusCode == 201 || response.statusCode == 200) {
