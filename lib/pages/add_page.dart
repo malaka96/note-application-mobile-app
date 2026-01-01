@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:note_application_mobile_app/services/api_services.dart';
 
 class AddPage extends StatefulWidget {
   const AddPage({super.key});
@@ -20,10 +21,26 @@ class _AddPageState extends State<AddPage> {
     super.dispose();
   }
 
-
-
-  void _saveNote() {
-    
+  Future<void> _saveNote() async {
+    if (_formKey.currentState?.validate() ?? false) {
+      try {
+        await ApiServices().createNote(
+          _titleController.text,
+          _bodyController.text,
+        );
+        _titleController.clear();
+        _bodyController.clear();
+        if (!mounted) return;
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(const SnackBar(content: Text("Note created")));
+      } catch (e) {
+        if (!mounted) return;
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Failed to create a new note")),
+        );
+      }
+    }
   }
 
   @override
@@ -42,21 +59,23 @@ class _AddPageState extends State<AddPage> {
                 controller: _titleController,
                 decoration: InputDecoration(
                   label: Text("Title"),
-                  hintStyle: TextStyle(color: Colors.grey[600]),
                   border: OutlineInputBorder(
                     borderSide: const BorderSide(
                       color: Colors.grey,
                       width: 1.5,
                     ),
+                    borderRadius: BorderRadius.circular(8),
                   ),
                   enabledBorder: OutlineInputBorder(
                     borderSide: const BorderSide(
                       color: Colors.grey,
                       width: 1.5,
                     ),
+                    borderRadius: BorderRadius.circular(8),
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderSide: const BorderSide(color: Colors.black, width: 2),
+                    borderRadius: BorderRadius.circular(8),
                   ),
                 ),
                 validator: (value) {
@@ -82,18 +101,21 @@ class _AddPageState extends State<AddPage> {
                         color: Colors.grey,
                         width: 1.5,
                       ),
+                      borderRadius: BorderRadius.circular(8),
                     ),
                     enabledBorder: OutlineInputBorder(
                       borderSide: const BorderSide(
                         color: Colors.grey,
                         width: 1.5,
                       ),
+                      borderRadius: BorderRadius.circular(8),
                     ),
                     focusedBorder: OutlineInputBorder(
                       borderSide: const BorderSide(
                         color: Colors.black,
                         width: 1.5,
                       ),
+                      borderRadius: BorderRadius.circular(8),
                     ),
                     contentPadding: const EdgeInsets.all(16),
                   ),
@@ -116,6 +138,7 @@ class _AddPageState extends State<AddPage> {
                   padding: const EdgeInsets.symmetric(vertical: 16),
                   shape: RoundedRectangleBorder(
                     side: const BorderSide(color: Colors.black),
+                    borderRadius: BorderRadiusGeometry.circular(8),
                   ),
                 ),
                 onPressed: _saveNote,

@@ -21,14 +21,37 @@ class ApiServices {
   Future<void> deleteNote(int id) async {
     final response = await http.delete(
       Uri.parse("http://localhost:8080/delete/$id"),
-      headers: {
-        'Accept': 'application/json',
-      }
+      headers: {'Accept': 'application/json'},
     );
     if (response.statusCode == 200 || response.statusCode == 204) {
       //
     } else {
       throw Exception("Failed to delete Note");
+    }
+  }
+
+  Future<void> createNote(String title, String body) async {
+    try {
+      final response = await http.post(
+        Uri.parse("http://localhost:8080/add"),
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+        body: jsonEncode(
+          Note(id: 0, title: title, body: body, isFavorite: false).toJson(),
+        ),
+      );
+
+      if (response.statusCode == 201 || response.statusCode == 200) {
+        // If server returns the created note with real id
+      } else {
+        throw Exception(
+          'Failed to create note • Status: ${response.statusCode}\n${response.body}',
+        );
+      }
+    } catch (e) {
+      throw Exception(e);
     }
   }
 }
