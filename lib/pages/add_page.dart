@@ -46,7 +46,7 @@ class _AddPageState extends State<AddPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('New Note')),
+      appBar: AppBar(title: const Text('Add New Note',style: TextStyle(fontWeight: FontWeight.bold),)),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Form(

@@ -5,7 +5,7 @@ import 'package:http/http.dart' as http;
 
 class ApiServices {
   Future<List<Note>> fetchAllNotes() async {
-    final response = await http.get(Uri.parse("http://localhost:8080/"));
+    final response = await http.get(Uri.parse("http://10.0.2.2:8080/"));
 
     if (response.statusCode == 200) {
       final List<dynamic> jsonData = json.decode(response.body);
@@ -19,7 +19,7 @@ class ApiServices {
   }
 
   Future<List<Note>> fetchFavoritesNotes() async {
-    final response = await http.get(Uri.parse("http://localhost:8080/"));
+    final response = await http.get(Uri.parse("http://10.0.2.2:8080/"));
 
     if (response.statusCode == 200) {
       final List<dynamic> jsonData = json.decode(response.body);
@@ -35,7 +35,7 @@ class ApiServices {
 
   Future<void> deleteNote(int id) async {
     final response = await http.delete(
-      Uri.parse("http://localhost:8080/delete/$id"),
+      Uri.parse("http://10.0.2.2:8080/delete/$id"),
       headers: {'Accept': 'application/json'},
     );
     if (response.statusCode == 200 || response.statusCode == 204) {
@@ -48,7 +48,7 @@ class ApiServices {
   Future<void> createNote(String title, String body) async {
     try {
       final response = await http.post(
-        Uri.parse("http://localhost:8080/add"),
+        Uri.parse("http://10.0.2.2:8080/add"),
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json',
@@ -73,7 +73,7 @@ class ApiServices {
   Future<void> updateNote(Note note) async {
     try {
       final response = await http.put(
-        Uri.parse("http://localhost:8080/update"),
+        Uri.parse("http://10.0.2.2:8080/update"),
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json',

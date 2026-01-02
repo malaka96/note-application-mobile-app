@@ -54,7 +54,9 @@ class _HomePageState extends State<HomePage> {
           isFavorite: !note.isFavorite,
         ),
       );
-
+      setState(() {
+        
+      });
       if (!mounted) return;
 
       ScaffoldMessenger.of(
@@ -72,7 +74,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Home Page")),
+      appBar: AppBar(title: Text("Note Server",style: TextStyle(fontWeight: FontWeight.bold))),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: FutureBuilder(
