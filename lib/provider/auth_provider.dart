@@ -8,7 +8,22 @@ class AuthProvider extends ChangeNotifier {
 
   Future<void> checkLoginStatus() async {
     final token = await _storage.getToken();
-    isLoggedIn = token != null;
+
+    try {
+      final response = await Dio().get(
+        "http://10.0.2.2:8080/auth/isAuthenticated",
+        options: Options(headers: {"Authorization": "Bearer $token"}),
+      );
+      if (response.data == true) {
+        isLoggedIn = true;
+      } else {
+        isLoggedIn = false;
+      }
+    } on DioException {
+      _storage.deleteToken();
+      isLoggedIn = false;
+    }
+
     notifyListeners();
   }
 
@@ -23,8 +38,7 @@ class AuthProvider extends ChangeNotifier {
       await _storage.saveToken(token);
       isLoggedIn = true;
       notifyListeners();
-    } on DioException{
-      await _storage.deleteToken();
+    } on DioException {
       isLoggedIn = false;
       notifyListeners();
       rethrow;
