@@ -122,6 +122,11 @@ class _RegisterPageState extends State<RegisterPage> {
                     _emailController.text,
                     _passwordController.text,
                   );
+                  if (context.mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text("Registration successful")),
+                    );
+                  }
                 } on DioException catch (e) {
                   if (context.mounted) {
                     ScaffoldMessenger.of(context).showSnackBar(

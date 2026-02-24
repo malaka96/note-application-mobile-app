@@ -24,6 +24,7 @@ class AuthProvider extends ChangeNotifier {
       isLoggedIn = true;
       notifyListeners();
     } on DioException{
+      await _storage.deleteToken();
       isLoggedIn = false;
       notifyListeners();
       rethrow;
