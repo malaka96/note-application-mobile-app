@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:note_application_mobile_app/pages/account_page.dart';
 import 'package:note_application_mobile_app/pages/add_page.dart';
 import 'package:note_application_mobile_app/pages/favorite_page.dart';
 import 'package:note_application_mobile_app/pages/home_page.dart';
@@ -12,7 +13,12 @@ class ScreenManager extends StatefulWidget {
 
 class _ScreenManagerState extends State<ScreenManager> {
   int _selectedIndex = 0;
-  final List<Widget> _screenList = [HomePage(), AddPage(), FavoritePage()];
+  final List<Widget> _screenList = [
+    HomePage(),
+    AddPage(),
+    FavoritePage(),
+    AccountPage(),
+  ];
 
   void _onItemTap(int index) {
     setState(() {
@@ -23,10 +29,19 @@ class _ScreenManagerState extends State<ScreenManager> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _screenList[_selectedIndex],
+      body: (_selectedIndex >= 0 && _selectedIndex < _screenList.length)
+          ? _screenList[_selectedIndex]
+          : _screenList[0],
       bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
+        backgroundColor: Colors.white,
+        selectedItemColor: Colors.black,
+        unselectedItemColor: Colors.grey,
         onTap: _onItemTap,
-        currentIndex: _selectedIndex,
+        currentIndex:
+            (_selectedIndex >= 0 && _selectedIndex < _screenList.length)
+            ? _selectedIndex
+            : 0,
         items: [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
           BottomNavigationBarItem(
@@ -36,6 +51,10 @@ class _ScreenManagerState extends State<ScreenManager> {
           BottomNavigationBarItem(
             icon: Icon(Icons.favorite),
             label: "Favorites",
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.account_box_rounded),
+            label: "Account",
           ),
         ],
       ),
