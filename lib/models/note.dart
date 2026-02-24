@@ -4,10 +4,20 @@ class Note {
   String body;
   bool isFavorite;
 
-  Note({required this.id, required this.title, required this.body, required this.isFavorite});
+  Note({
+    required this.id,
+    required this.title,
+    required this.body,
+    required this.isFavorite,
+  });
 
   factory Note.fromJson(Map<String, dynamic> json) {
-    return Note(id: json["id"], title: json["title"], body: json["body"], isFavorite: json["favorite"]);
+    return Note(
+      id: json["id"],
+      title: json["title"],
+      body: json["body"],
+      isFavorite: json["isFavorite"],
+    );
   }
 
   Map<String, dynamic> toJson() {

@@ -1,4 +1,6 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:note_application_mobile_app/services/api_services.dart';
 
 class RegisterPage extends StatefulWidget {
   final void Function(bool) onPressed;
@@ -114,7 +116,24 @@ class _RegisterPageState extends State<RegisterPage> {
                   borderRadius: BorderRadius.circular(8),
                 ),
               ),
-              onPressed: () {},
+              onPressed: () async {
+                try {
+                  await ApiServices().registerUser(
+                    _emailController.text,
+                    _passwordController.text,
+                  );
+                } on DioException catch (e) {
+                  if (context.mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(
+                          e.response?.data.toString() ?? "Registration fail",
+                        ),
+                      ),
+                    );
+                  }
+                }
+              },
               child: const Text(
                 'REGISTER',
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
