@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
 
-class LoginPage extends StatefulWidget {
+class RegisterPage extends StatefulWidget {
   final void Function(bool) onPressed;
-  const LoginPage({super.key, required this.onPressed});
+  const RegisterPage({super.key, required this.onPressed});
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<RegisterPage> createState() => _RegisterPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _RegisterPageState extends State<RegisterPage> {
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  final _confirmPasswordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -65,21 +66,44 @@ class _LoginPageState extends State<LoginPage> {
               ),
             ),
 
+            const SizedBox(height: 20),
+
+            // Confirm Password Field
+            TextFormField(
+              controller: _confirmPasswordController,
+              obscureText: true,
+              decoration: InputDecoration(
+                label: const Text("Confirm Password"),
+                border: OutlineInputBorder(
+                  borderSide: const BorderSide(color: Colors.grey, width: 1.5),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderSide: const BorderSide(color: Colors.grey, width: 1.5),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: const BorderSide(color: Colors.black, width: 2),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+              ),
+            ),
+
             const SizedBox(height: 10),
             Row(
               children: [
-                Text("Don't have an account?"),
+                Text("Already have an account?"),
                 TextButton(
                   onPressed: () {
-                    widget.onPressed(false);
+                    widget.onPressed(true);
                   },
-                  child: Text("create an account."),
+                  child: Text("login to account"),
                 ),
               ],
             ),
             const SizedBox(height: 10),
 
-            // Login Button
+            // Register Button
             FilledButton(
               style: FilledButton.styleFrom(
                 backgroundColor: Colors.white,
@@ -92,7 +116,7 @@ class _LoginPageState extends State<LoginPage> {
               ),
               onPressed: () {},
               child: const Text(
-                'LOGIN',
+                'REGISTER',
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
             ),
