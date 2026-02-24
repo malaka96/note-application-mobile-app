@@ -1,4 +1,7 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:note_application_mobile_app/provider/auth_provider.dart';
+import 'package:provider/provider.dart';
 
 class LoginPage extends StatefulWidget {
   final void Function(bool) onPressed;
@@ -15,6 +18,7 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    final authProvider = Provider.of<AuthProvider>(context);
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Form(
@@ -90,7 +94,27 @@ class _LoginPageState extends State<LoginPage> {
                   borderRadius: BorderRadius.circular(8),
                 ),
               ),
-              onPressed: () {},
+              onPressed: () async {
+                try {
+                  await authProvider.login(
+                    _emailController.text,
+                    _passwordController.text,
+                  );
+                  if (context.mounted) {
+                    ScaffoldMessenger.of(
+                      context,
+                    ).showSnackBar(SnackBar(content: Text("Login successful")));
+                  }
+                } on DioException catch (e) {
+                  if (context.mounted) {
+                    final errorMessage =
+                        e.response?.data["message"] ?? "Login failed";
+                    ScaffoldMessenger.of(
+                      context,
+                    ).showSnackBar(SnackBar(content: Text(errorMessage)));
+                  }
+                }
+              },
               child: const Text(
                 'LOGIN',
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),

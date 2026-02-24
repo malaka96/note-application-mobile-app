@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:note_application_mobile_app/models/note.dart';
+import 'package:note_application_mobile_app/provider/auth_provider.dart';
 import 'package:note_application_mobile_app/services/api_services.dart';
 import 'package:note_application_mobile_app/widgets/bottom_sheet_body.dart';
 import 'package:note_application_mobile_app/widgets/note_card.dart';
+import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -54,9 +56,7 @@ class _HomePageState extends State<HomePage> {
           isFavorite: !note.isFavorite,
         ),
       );
-      setState(() {
-        
-      });
+      setState(() {});
       if (!mounted) return;
 
       ScaffoldMessenger.of(
@@ -73,11 +73,18 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final authProvider = Provider.of<AuthProvider>(context);
+
     return Scaffold(
-      appBar: AppBar(title: Text("Note Server",style: TextStyle(fontWeight: FontWeight.bold))),
+      appBar: AppBar(
+        title: Text(
+          "Note Server",
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: FutureBuilder(
+        child: !authProvider.isLoggedIn ? Text("Login") : FutureBuilder(
           future: ApiServices().fetchAllNotes(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
