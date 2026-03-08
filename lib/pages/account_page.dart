@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:note_application_mobile_app/pages/account_details_page.dart';
 import 'package:note_application_mobile_app/pages/login_page.dart';
 import 'package:note_application_mobile_app/pages/register_page.dart';
+import 'package:note_application_mobile_app/provider/auth_provider.dart';
+import 'package:provider/provider.dart';
 
 class AccountPage extends StatefulWidget {
   const AccountPage({super.key});
@@ -14,6 +17,8 @@ class _AccountPageState extends State<AccountPage> {
 
   @override
   Widget build(BuildContext context) {
+    final authProvider = Provider.of<AuthProvider>(context);
+
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -21,7 +26,7 @@ class _AccountPageState extends State<AccountPage> {
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
       ),
-      body: _haveAnAccount
+      body: authProvider.isLoggedIn ? AccountDetailsPage() : _haveAnAccount
           ? LoginPage(
               onPressed: (value) {
                 setState(() {

@@ -1,6 +1,5 @@
 import 'package:dio/dio.dart';
 import 'package:note_application_mobile_app/models/note.dart';
-import 'package:http/http.dart' as http;
 import 'package:note_application_mobile_app/services/secure_storage_service.dart';
 
 class ApiServices {
