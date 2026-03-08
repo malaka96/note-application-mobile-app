@@ -43,6 +43,12 @@ class _RegisterPageState extends State<RegisterPage> {
                   borderRadius: BorderRadius.circular(8),
                 ),
               ),
+              validator: (value) {
+                if (value == null || value.trim().isEmpty) {
+                  return "Enter an email";
+                }
+                return null;
+              },
             ),
 
             const SizedBox(height: 20),
@@ -66,6 +72,12 @@ class _RegisterPageState extends State<RegisterPage> {
                   borderRadius: BorderRadius.circular(8),
                 ),
               ),
+              validator: (value) {
+                if (value == null || value.trim().isEmpty) {
+                  return "Enter a password";
+                }
+                return null;
+              },
             ),
 
             const SizedBox(height: 20),
@@ -89,6 +101,12 @@ class _RegisterPageState extends State<RegisterPage> {
                   borderRadius: BorderRadius.circular(8),
                 ),
               ),
+              validator: (value) {
+                if (value != _passwordController.text) {
+                  return "Passwords are not match";
+                }
+                return null;
+              },
             ),
 
             const SizedBox(height: 10),
@@ -118,9 +136,8 @@ class _RegisterPageState extends State<RegisterPage> {
               ),
               onPressed: () async {
 
-                //TODO : validate email, password, confirm password fields. 
-
-                try {
+                if(_formKey.currentState?.validate() ?? false){
+                  try {
                   await ApiServices().registerUser(
                     _emailController.text,
                     _passwordController.text,
@@ -141,6 +158,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       ),
                     );
                   }
+                }
                 }
               },
               child: const Text(

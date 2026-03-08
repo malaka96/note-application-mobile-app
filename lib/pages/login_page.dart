@@ -44,6 +44,12 @@ class _LoginPageState extends State<LoginPage> {
                   borderRadius: BorderRadius.circular(8),
                 ),
               ),
+              validator: (value) {
+                if (value == null || value.trim().isEmpty) {
+                  return "Enter an email";
+                }
+                return null;
+              },
             ),
 
             const SizedBox(height: 20),
@@ -67,6 +73,12 @@ class _LoginPageState extends State<LoginPage> {
                   borderRadius: BorderRadius.circular(8),
                 ),
               ),
+              validator: (value) {
+                if (value == null || value.trim().isEmpty) {
+                  return "Enter a password";
+                }
+                return null;
+              },
             ),
 
             const SizedBox(height: 10),
@@ -96,9 +108,8 @@ class _LoginPageState extends State<LoginPage> {
               ),
               onPressed: () async {
 
-                // TODO: validate email, password fields
-
-                try {
+                if(_formKey.currentState?.validate() ?? false){
+                  try {
                   await authProvider.login(
                     _emailController.text,
                     _passwordController.text,
@@ -116,6 +127,7 @@ class _LoginPageState extends State<LoginPage> {
                       context,
                     ).showSnackBar(SnackBar(content: Text(errorMessage)));
                   }
+                }
                 }
               },
               child: const Text(
