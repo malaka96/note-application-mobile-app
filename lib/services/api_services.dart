@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:dio/dio.dart';
 import 'package:note_application_mobile_app/models/note.dart';
 import 'package:http/http.dart' as http;
@@ -115,21 +113,20 @@ class ApiServices {
 
   Future<void> updateNote(Note note) async {
     try {
-      final response = await http.put(
-        Uri.parse("http://10.0.2.2:8080/update"),
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
+      final response = await dio.put(
+        "/note/update",
+        data: {
+          "title": note.title,
+          "body": note.body,
+          "isFavorite": note.isFavorite,
         },
-        body: jsonEncode(note.toJson()),
+        queryParameters: {"id": note.id},
       );
 
       if (response.statusCode == 201 || response.statusCode == 200) {
         // If server returns the created note with real id
       } else {
-        throw Exception(
-          'Failed to update note • Status: ${response.statusCode}\n${response.body}',
-        );
+        throw Exception('Failed to update note');
       }
     } catch (e) {
       throw Exception(e);
