@@ -48,4 +48,19 @@ class AuthProvider extends ChangeNotifier {
       rethrow;
     }
   }
+
+  Future<void> logout() async {
+    try {
+      final response = await Dio().get("http://10.0.2.2:8080/auth/logout");
+      if (response.statusCode == 200) {
+        isLoggedIn = false;
+        _storage.deleteToken();
+        notifyListeners();
+      }
+    } on DioException {
+      rethrow;
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
 }

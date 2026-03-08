@@ -131,4 +131,17 @@ class ApiServices {
       throw Exception(e);
     }
   }
+
+  Future<Map<String, dynamic>> fetchUserDetails() async {
+    try {
+      final response = await dio.get("/user/details");
+      if (response.statusCode == 200) {
+        return response.data;
+      } else {
+        throw Exception("Failed to fetch user details");
+      }
+    } catch (e) {
+      throw Exception("Failed to fetch user details");
+    }
+  }
 }
