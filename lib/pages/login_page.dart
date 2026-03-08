@@ -95,6 +95,9 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
               onPressed: () async {
+
+                // TODO: validate email, password fields
+
                 try {
                   await authProvider.login(
                     _emailController.text,

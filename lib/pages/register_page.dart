@@ -117,6 +117,9 @@ class _RegisterPageState extends State<RegisterPage> {
                 ),
               ),
               onPressed: () async {
+
+                //TODO : validate email, password, confirm password fields. 
+
                 try {
                   await ApiServices().registerUser(
                     _emailController.text,
@@ -127,6 +130,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       SnackBar(content: Text("Registration successful")),
                     );
                   }
+                  widget.onPressed(true);
                 } on DioException catch (e) {
                   if (context.mounted) {
                     ScaffoldMessenger.of(context).showSnackBar(

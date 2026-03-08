@@ -63,17 +63,13 @@ class ApiServices {
   }
 
   Future<List<Note>> fetchFavoritesNotes() async {
-    final response = await http.get(Uri.parse("http://10.0.2.2:8080/"));
-
+    final response = await dio.get("/note/all/favorite");
     if (response.statusCode == 200) {
-      final List<dynamic> jsonData = json.decode(response.body);
+      final List<dynamic> data = response.data;
 
-      return jsonData
-          .map((item) => Note.fromJson(item))
-          .where((note) => note.isFavorite)
-          .toList();
+      return data.map((item) => Note.fromJson(item)).toList();
     } else {
-      throw Exception("Failed to fetch all notes");
+      throw Exception("Failed to fetch favorite notes");
     }
   }
 

@@ -10,12 +10,16 @@ class AuthProvider extends ChangeNotifier {
     final token = await _storage.getToken();
 
     try {
-      final response = await Dio().get(
-        "http://10.0.2.2:8080/auth/isAuthenticated",
-        options: Options(headers: {"Authorization": "Bearer $token"}),
-      );
-      if (response.data == true) {
-        isLoggedIn = true;
+      if (token != null) {
+        final response = await Dio().get(
+          "http://10.0.2.2:8080/auth/isAuthenticated",
+          options: Options(headers: {"Authorization": "Bearer $token"}),
+        );
+        if (response.data == true) {
+          isLoggedIn = true;
+        } else {
+          isLoggedIn = false;
+        }
       } else {
         isLoggedIn = false;
       }
