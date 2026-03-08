@@ -98,23 +98,15 @@ class ApiServices {
 
   Future<void> createNote(String title, String body) async {
     try {
-      final response = await http.post(
-        Uri.parse("http://10.0.2.2:8080/add"),
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-        },
-        body: jsonEncode(
-          Note(id: 0, title: title, body: body, isFavorite: false).toJson(),
-        ),
+      final response = await dio.post(
+        "/note/add",
+        data: {"title": title, "body": body},
       );
 
-      if (response.statusCode == 201 || response.statusCode == 200) {
-        // If server returns the created note with real id
+      if (response.statusCode == 201) {
+        //
       } else {
-        throw Exception(
-          'Failed to create note • Status: ${response.statusCode}\n${response.body}',
-        );
+        throw Exception("Cannnot create note");
       }
     } catch (e) {
       throw Exception(e);
