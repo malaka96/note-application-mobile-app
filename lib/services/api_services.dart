@@ -83,9 +83,9 @@ class ApiServices {
   }
 
   Future<void> deleteNote(int id) async {
-    final response = await http.delete(
-      Uri.parse("http://10.0.2.2:8080/delete/$id"),
-      headers: {'Accept': 'application/json'},
+    final response = await dio.delete(
+      "/note/delete",
+      queryParameters: {"id": id},
     );
     if (response.statusCode == 200 || response.statusCode == 204) {
       //
