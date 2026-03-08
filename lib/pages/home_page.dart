@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:note_application_mobile_app/models/note.dart';
 import 'package:note_application_mobile_app/provider/auth_provider.dart';
@@ -48,21 +49,14 @@ class _HomePageState extends State<HomePage> {
 
   Future<void> _toggleFavorite(Note note) async {
     try {
-      await ApiServices().updateNote(
-        Note(
-          id: note.id,
-          title: note.title,
-          body: note.body,
-          isFavorite: !note.isFavorite,
-        ),
-      );
+      await ApiServices().updateNoteFavoriteState(note.id, !note.isFavorite);
       setState(() {});
       if (!mounted) return;
 
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(const SnackBar(content: Text("Toggled favorite")));
-    } catch (e) {
+    } on DioException {
       if (!mounted) return;
 
       ScaffoldMessenger.of(context).showSnackBar(
@@ -84,41 +78,43 @@ class _HomePageState extends State<HomePage> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: !authProvider.isLoggedIn ? Text("Login") : FutureBuilder(
-          future: ApiServices().fetchAllNotes(),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(child: CircularProgressIndicator());
-            } else if (snapshot.hasError) {
-              return const Center(child: Text("Error fetching notes"));
-            } else if (!snapshot.hasData) {
-              return const Center(child: Text("No any notes avaliable"));
-            } else {
-              final notes = snapshot.data!;
-              return ListView.builder(
-                itemCount: notes.length,
-                itemBuilder: (context, index) {
-                  final note = notes[index];
-                  return NoteCard(
-                    id: note.id,
-                    title: note.title,
-                    body: note.body,
-                    isFavorite: note.isFavorite,
-                    delete: () {
-                      _deleteNote(note.id);
-                    },
-                    toggleFavorite: () {
-                      _toggleFavorite(note);
-                    },
-                    showBottomSheet: () {
-                      showBottomSheet(note);
-                    },
-                  );
+        child: !authProvider.isLoggedIn
+            ? Text("Login")
+            : FutureBuilder(
+                future: ApiServices().fetchAllNotes(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(child: CircularProgressIndicator());
+                  } else if (snapshot.hasError) {
+                    return const Center(child: Text("Error fetching notes"));
+                  } else if (!snapshot.hasData) {
+                    return const Center(child: Text("No any notes avaliable"));
+                  } else {
+                    final notes = snapshot.data!;
+                    return ListView.builder(
+                      itemCount: notes.length,
+                      itemBuilder: (context, index) {
+                        final note = notes[index];
+                        return NoteCard(
+                          id: note.id,
+                          title: note.title,
+                          body: note.body,
+                          isFavorite: note.isFavorite,
+                          delete: () {
+                            _deleteNote(note.id);
+                          },
+                          toggleFavorite: () {
+                            _toggleFavorite(note);
+                          },
+                          showBottomSheet: () {
+                            showBottomSheet(note);
+                          },
+                        );
+                      },
+                    );
+                  }
                 },
-              );
-            }
-          },
-        ),
+              ),
       ),
     );
   }

@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:note_application_mobile_app/models/note.dart';
 import 'package:note_application_mobile_app/services/api_services.dart';
@@ -46,21 +47,14 @@ class _FavoritePageState extends State<FavoritePage> {
 
   Future<void> _toggleFavorite(Note note) async {
     try {
-      await ApiServices().updateNote(
-        Note(
-          id: note.id,
-          title: note.title,
-          body: note.body,
-          isFavorite: !note.isFavorite,
-        ),
-      );
-
+      await ApiServices().updateNoteFavoriteState(note.id, !note.isFavorite);
+      setState(() {});
       if (!mounted) return;
 
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(const SnackBar(content: Text("Toggled favorite")));
-    } catch (e) {
+    } on DioException {
       if (!mounted) return;
 
       ScaffoldMessenger.of(context).showSnackBar(
@@ -72,7 +66,9 @@ class _FavoritePageState extends State<FavoritePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Favorites",style: TextStyle(fontWeight: FontWeight.bold))),
+      appBar: AppBar(
+        title: Text("Favorites", style: TextStyle(fontWeight: FontWeight.bold)),
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: FutureBuilder(

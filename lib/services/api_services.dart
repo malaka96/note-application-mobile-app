@@ -73,6 +73,17 @@ class ApiServices {
     }
   }
 
+  Future<void> updateNoteFavoriteState(int id, bool newState) async {
+    try {
+      await dio.put(
+        "/note/update/favorite",
+        queryParameters: {"id": id, "isFavorite": newState},
+      );
+    } on DioException {
+      rethrow;
+    }
+  }
+
   Future<void> deleteNote(int id) async {
     final response = await http.delete(
       Uri.parse("http://10.0.2.2:8080/delete/$id"),
